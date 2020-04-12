@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    if (rootProject.getName().equals("Anvil")) {
+        implementation project(':anvil-api')
+        implementation project(':anvil-common')
+    } else {
+        implementation project(':Anvil:anvil-api')
+        implementation project(':Anvil:anvil-common')
+    }
+
+    implementation guice
+    implementation luckperms
+}
