@@ -21,26 +21,25 @@ package org.anvilpowered.anvil.bungee.server
 import com.google.inject.Inject
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import org.anvilpowered.anvil.api.server.BackendServer
 import org.anvilpowered.anvil.api.util.UserService
 import org.anvilpowered.anvil.common.server.CommonLocationService
 import java.util.Optional
 import java.util.UUID
 import kotlin.streams.toList
 
-class BungeeLocationService : CommonLocationService() {
+class BungeeLocationService @Inject constructor(
+    private val userService: UserService<ProxiedPlayer, ProxiedPlayer>
+) : CommonLocationService() {
 
-    @Inject
-    private lateinit var userService: UserService<ProxiedPlayer, ProxiedPlayer>
-
-    private fun getServer(user: Optional<ProxiedPlayer>): Optional<BungeeBackendServer> {
-        return user.map { it.server }.map { BungeeBackendServer(it.info, userService) }
+    private fun getServer(user: Optional<ProxiedPlayer>): BackendServer? {
+        return user.map { it.server }.map { BungeeBackendServer(it.info, userService) }.orElse(null)
     }
 
-    override fun getServer(userUUID: UUID): Optional<BungeeBackendServer> = getServer(userService.getPlayer(userUUID))
-    override fun getServer(userName: String): Optional<BungeeBackendServer> = getServer(userService.getPlayer(userName))
-    override fun getServerForName(serverName: String): Optional<BungeeBackendServer> {
-        return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(serverName))
-            .map { BungeeBackendServer(it, userService) }
+    override fun getServer(userUUID: UUID): BackendServer? = getServer(userService.getPlayer(userUUID))
+    override fun getServer(userName: String): BackendServer? = getServer(userService.getPlayer(userName))
+    override fun getServerForName(serverName: String): BackendServer? {
+        return BungeeBackendServer(ProxyServer.getInstance().getServerInfo(serverName) ?: return null, userService)
     }
 
     override fun getServers(): List<BungeeBackendServer> {

@@ -31,7 +31,7 @@ class BungeeBackendServer(
     private val server: BServerInfo,
     userService: UserService<ProxiedPlayer, ProxiedPlayer>,
 ) : CommonBackendServer<ProxiedPlayer, ProxiedPlayer>(userService) {
-    override fun getName(): String = server.name
+    override val name: String = server.name
     override fun getVersion(): CompletableFuture<BungeeVersion> {
         val future = CompletableFuture<BungeeVersion>()
         server.ping { ping, _ -> future.complete(BungeeVersion(ping.version)) }

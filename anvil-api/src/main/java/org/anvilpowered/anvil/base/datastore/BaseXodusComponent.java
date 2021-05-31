@@ -21,11 +21,11 @@ package org.anvilpowered.anvil.base.datastore;
 import jetbrains.exodus.entitystore.EntityId;
 import jetbrains.exodus.entitystore.PersistentEntityId;
 import jetbrains.exodus.entitystore.PersistentEntityStore;
-import org.anvilpowered.anvil.api.datastore.Component;
+import org.anvilpowered.anvil.api.datastore.DBComponent;
 
 import java.util.Optional;
 
-public interface BaseXodusComponent extends Component<EntityId, PersistentEntityStore> {
+public interface BaseXodusComponent extends DBComponent<EntityId, PersistentEntityStore> {
 
     @Override
     default EntityId parseUnsafe(Object object) {

@@ -27,22 +27,19 @@ import java.util.Optional
 import java.util.UUID
 import kotlin.streams.toList
 
-class VelocityLocationService : CommonLocationService() {
-
-    @Inject
-    private lateinit var proxyServer: ProxyServer
-
-    @Inject
-    private lateinit var userService: UserService<Player, Player>
+class VelocityLocationService @Inject constructor(
+    private val proxyServer: ProxyServer,
+    private val userService: UserService<Player, Player>
+) : CommonLocationService() {
 
     private fun Optional<Player>.getServer(): Optional<VelocityBackendServer> {
         return flatMap { it.currentServer }.map { VelocityBackendServer(it.server, userService) }
     }
 
-    override fun getServer(userUUID: UUID): Optional<VelocityBackendServer> = userService.getPlayer(userUUID).getServer()
-    override fun getServer(userName: String): Optional<VelocityBackendServer> = userService.getPlayer(userName).getServer()
-    override fun getServerForName(serverName: String): Optional<VelocityBackendServer> {
-        return proxyServer.getServer(serverName).map { VelocityBackendServer(it, userService) }
+    override fun getServer(userUUID: UUID): VelocityBackendServer? = userService.getPlayer(userUUID).getServer().orElse(null)
+    override fun getServer(userName: String): VelocityBackendServer? = userService.getPlayer(userName).getServer().orElse(null)
+    override fun getServerForName(serverName: String): VelocityBackendServer? {
+        return proxyServer.getServer(serverName).map { VelocityBackendServer(it, userService) }.orElse(null)
     }
 
     override fun getServers(): List<VelocityBackendServer> {

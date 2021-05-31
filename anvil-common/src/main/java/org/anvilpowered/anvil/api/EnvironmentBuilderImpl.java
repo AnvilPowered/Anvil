@@ -28,10 +28,10 @@ import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
-import org.anvilpowered.anvil.api.command.CommandNode;
-import org.anvilpowered.anvil.api.misc.BindingExtensions;
+import org.anvilpowered.anvil.api.misc._AbstractModuleKt;
 import org.anvilpowered.anvil.api.registry.Registry;
 import org.anvilpowered.anvil.api.registry.RegistryScope;
+import org.anvilpowered.anvil.common.PlatformImpl;
 import org.anvilpowered.anvil.common.module.PlatformModule;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -137,9 +137,6 @@ public class EnvironmentBuilderImpl implements Environment.Builder {
                 ((Consumer) entry.getValue())
                     .accept(injector.getInstance(entry.getKey()));
             }
-            if (environment.withRootCommand()) {
-                environment.getInstance(CommandNode.class.getCanonicalName());
-            }
             Registry registry = injector.getInstance(Registry.class);
             for (Consumer<Environment> listener
                 : loadedListeners.get(environment.getName())) {
@@ -209,7 +206,7 @@ public class EnvironmentBuilderImpl implements Environment.Builder {
 
     @Override
     public Environment.Builder addEarlyServices(TypeToken<?>... typeTokens) {
-        return addEarlyServices(Stream.of(typeTokens), BindingExtensions::getKey);
+        return addEarlyServices(Stream.of(typeTokens), typeToken -> Key.get(_AbstractModuleKt.toTypeLiteralNoInline(typeToken)));
     }
 
     @Override
@@ -232,7 +229,7 @@ public class EnvironmentBuilderImpl implements Environment.Builder {
 
     @Override
     public <T> Environment.Builder addEarlyServices(TypeToken<T> typeToken, Consumer<T> initializer) {
-        earlyServices.put(BindingExtensions.getKey(typeToken), initializer);
+        earlyServices.put(Key.get(_AbstractModuleKt.toTypeLiteralNoInline(typeToken)), initializer);
         return this;
     }
 
@@ -254,12 +251,6 @@ public class EnvironmentBuilderImpl implements Environment.Builder {
     @Override
     public Environment.Builder setLoggerSupplier(Supplier<?> logger) {
         this.loggerSupplier = logger;
-        return this;
-    }
-
-    @Override
-    public Environment.Builder withRootCommand() {
-        withRootCommand = true;
         return this;
     }
 

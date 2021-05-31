@@ -3,13 +3,14 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'io.codearte.nexus-staging' version '0.21.2'
     id("org.jetbrains.kotlin.jvm") version "${kotlin_version}"
+    id("org.jetbrains.kotlin.kapt") version "${kotlin_version}"
 }
 
 ext.apiVersion = "0.4-SNAPSHOT"
 
 allprojects {
     group = "org.anvilpowered"
-    version = "0.3.1-SNAPSHOT"
+    version = "0.4.0-SNAPSHOT"
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
     apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -42,7 +43,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven { url 'https://repo.spongepowered.org/maven' }
+        maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
         maven { url 'https://jetbrains.bintray.com/xodus' }
         maven { url 'https://dl.bintray.com/kotlin/kotlinx' }
     }

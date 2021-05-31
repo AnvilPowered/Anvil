@@ -24,6 +24,6 @@ import org.anvilpowered.anvil.api.server.Version
 class BungeeVersion(
     val version: ServerPing.Protocol
 ) : Version {
-    override fun getName(): String = version.name
+    override val name: String = version.name
     override fun getProtocol(): Int = version.protocol
 }

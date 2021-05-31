@@ -19,6 +19,7 @@
 package org.anvilpowered.anvil.nukkit.listener;
 
 import cn.nukkit.Player;
+import cn.nukkit.command.CommandSender;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerChatEvent;
@@ -26,9 +27,10 @@ import cn.nukkit.event.player.PlayerJoinEvent;
 import com.google.inject.Inject;
 import org.anvilpowered.anvil.api.coremember.CoreMemberManager;
 import org.anvilpowered.anvil.api.model.coremember.CoreMember;
-import org.anvilpowered.anvil.api.plugin.PluginMessages;
 import org.anvilpowered.anvil.api.registry.Keys;
 import org.anvilpowered.anvil.api.registry.Registry;
+import org.anvilpowered.anvil.api.util.TextService;
+import org.anvilpowered.anvil.common.plugin.AnvilPluginMessages;
 
 public class NukkitPlayerListener implements Listener {
 
@@ -36,7 +38,10 @@ public class NukkitPlayerListener implements Listener {
     private CoreMemberManager coreMemberManager;
 
     @Inject
-    private PluginMessages<String> pluginMessages;
+    private AnvilPluginMessages pluginMessages;
+
+    @Inject
+    private TextService<CommandSender> textService;
 
     @Inject
     private Registry registry;
@@ -56,10 +61,10 @@ public class NukkitPlayerListener implements Listener {
             if (!optionalMember.isPresent()) {
                 return;
             }
-            CoreMember<?> coreMember = optionalMember.get();
-            if (coreMemberManager.getPrimaryComponent().checkBanned(coreMember)) {
-                player.kick(
-                    pluginMessages.getBanMessage(coreMember.getBanReason(), coreMember.getBanEndUtc()),
+            CoreMember<?> member = optionalMember.get();
+            if (coreMemberManager.getPrimaryComponent().checkBanned(member)) {
+                player.kick(textService.serializeAmpersand(
+                    pluginMessages.getBanMessage(member.getBanReason(), member.getBanEndUtc())),
                     false
                 );
             }
@@ -79,11 +84,11 @@ public class NukkitPlayerListener implements Listener {
             if (!optionalMember.isPresent()) {
                 return;
             }
-            CoreMember<?> coreMember = optionalMember.get();
-            if (coreMemberManager.getPrimaryComponent().checkMuted(coreMember)) {
+            CoreMember<?> member = optionalMember.get();
+            if (coreMemberManager.getPrimaryComponent().checkMuted(member)) {
                 event.setCancelled();
-                player.sendMessage(
-                    pluginMessages.getMuteMessage(coreMember.getMuteReason(), coreMember.getMuteEndUtc())
+                player.sendMessage(textService.serializeAmpersand(
+                    pluginMessages.getMuteMessage(member.getMuteReason(), member.getMuteEndUtc()))
                 );
             }
         }).join();

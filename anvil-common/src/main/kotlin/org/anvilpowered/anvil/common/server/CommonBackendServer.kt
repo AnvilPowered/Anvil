@@ -25,9 +25,9 @@ import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 abstract class CommonBackendServer<TUser : Any, TPlayer : Any>(
-    val userService: UserService<TUser, TPlayer>,
+  val userService: UserService<TUser, TPlayer>,
 ) : BackendServer {
-    abstract fun Optional<TPlayer>.connect(): CompletableFuture<Boolean>
-    override fun connect(userUUID: UUID): CompletableFuture<Boolean> = userService.getPlayer(userUUID).connect()
-    override fun connect(userName: String): CompletableFuture<Boolean> = userService.getPlayer(userName).connect()
+  abstract fun Optional<TPlayer>.connect(): CompletableFuture<Boolean>
+  override fun connect(userUUID: UUID): CompletableFuture<Boolean> = userService.getPlayer(userUUID).connect()
+  override fun connect(userName: String): CompletableFuture<Boolean> = userService.getPlayer(userName).connect()
 }

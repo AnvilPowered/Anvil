@@ -23,6 +23,8 @@ import org.anvilpowered.anvil.api.coremember.CoreMemberManager;
 import org.anvilpowered.anvil.api.entity.RestrictionService;
 import org.anvilpowered.anvil.api.registry.Keys;
 import org.anvilpowered.anvil.api.registry.Registry;
+import org.anvilpowered.anvil.api.util.AudienceService;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,6 +37,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class SpigotPlayerListener implements Listener {
+
+    @Inject
+    private AudienceService<CommandSender> audienceService;
 
     @Inject
     private CoreMemberManager coreMemberManager;
@@ -57,6 +62,7 @@ public class SpigotPlayerListener implements Listener {
                 player.getName(),
                 player.getAddress().getHostString()
             );
+        audienceService.addToPossible(player);
     }
 
     @EventHandler

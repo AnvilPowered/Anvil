@@ -19,7 +19,7 @@
 package org.anvilpowered.anvil.bungee.module
 
 import net.md_5.bungee.api.CommandSender
-import net.md_5.bungee.api.chat.TextComponent
 import org.anvilpowered.anvil.common.module.FallbackModule
 
-class BungeeFallbackModule : FallbackModule<TextComponent, CommandSender>()
+class BungeeFallbackModule : FallbackModule<CommandSender>() {
+}

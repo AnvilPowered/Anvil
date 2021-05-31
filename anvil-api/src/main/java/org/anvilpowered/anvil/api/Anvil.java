@@ -19,13 +19,11 @@
 package org.anvilpowered.anvil.api;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Binder;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import org.anvilpowered.anvil.api.coremember.CoreMemberManager;
 import org.anvilpowered.anvil.api.coremember.CoreMemberRepository;
-import org.anvilpowered.anvil.api.misc.BindingExtensions;
 import org.anvilpowered.anvil.api.registry.Registry;
 import org.anvilpowered.anvil.base.plugin.BasePlugin;
 
@@ -42,10 +40,6 @@ public class Anvil extends BasePlugin {
 
     Anvil(String name, Injector rootInjector, Module module) {
         super(name, rootInjector, module);
-    }
-
-    public static BindingExtensions getBindingExtensions(Binder binder) {
-        return getServiceManager().provide(BindingExtensions.class, binder);
     }
 
     public static Environment.Builder getEnvironmentBuilder() {

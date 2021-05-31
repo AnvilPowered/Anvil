@@ -19,12 +19,12 @@
 package org.anvilpowered.anvil.base.datastore;
 
 import dev.morphia.Datastore;
-import org.anvilpowered.anvil.api.datastore.Component;
+import org.anvilpowered.anvil.api.datastore.DBComponent;
 import org.bson.types.ObjectId;
 
 import java.util.Optional;
 
-public interface BaseMongoComponent extends Component<ObjectId, Datastore> {
+public interface BaseMongoComponent extends DBComponent<ObjectId, Datastore> {
 
     @Override
     default ObjectId parseUnsafe(Object object) {

@@ -30,7 +30,7 @@ public interface Repository<
     TKey,
     T extends ObjectWithId<TKey>,
     TDataStore>
-    extends Component<TKey, TDataStore> {
+    extends DBComponent<TKey, TDataStore> {
 
     /**
      * @return An empty {@link T}
@@ -106,8 +106,8 @@ public interface Repository<
      * @param idOrTime An id or time to parse. Can be an instance of {@link TKey} or a {@link String} representation. May
      *                 also be wrapped in an {@link Optional}
      * @return An {@link Optional} containing a matching {@link T document} if successful, otherwise {@link Optional#empty()}
-     * @see Component#parseUnsafe(Object)
-     * @see Component#parse(Object)
+     * @see DBComponent#parseUnsafe(Object)
+     * @see DBComponent#parse(Object)
      * @see TimeFormatService#parseInstantUnsafe(String)
      * @see TimeFormatService#parseInstant(String)
      */
@@ -150,8 +150,8 @@ public interface Repository<
      * @param idOrTime {@link Object} to parse. Can be an instance of {@link TKey} or a {@link String} representation. May
      *                 also be wrapped in an {@link Optional}
      * @return Whether a {@link T document} was found and deleted
-     * @see Component#parseUnsafe(Object)
-     * @see Component#parse(Object)
+     * @see DBComponent#parseUnsafe(Object)
+     * @see DBComponent#parse(Object)
      * @see TimeFormatService#parseInstantUnsafe(String)
      * @see TimeFormatService#parseInstant(String)
      */

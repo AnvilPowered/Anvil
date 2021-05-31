@@ -19,73 +19,63 @@
 package org.anvilpowered.anvil.common.command.regedit
 
 import com.google.inject.Inject
-import org.anvilpowered.anvil.api.Environment
-import org.anvilpowered.anvil.api.command.CommandNode
-import org.anvilpowered.anvil.api.command.CommandService
+import org.anvilpowered.anvil.api.command.CommandMapping
+import org.anvilpowered.anvil.api.command.SimpleCommand
+import org.anvilpowered.anvil.api.command.SimpleCommandService
 import org.anvilpowered.anvil.api.registry.Registry
-import org.anvilpowered.anvil.common.command.CommonAnvilCommandNode
-import java.util.function.Function
-import java.util.function.Predicate
 
-abstract class CommonRegistryEditCommandNode<TCommandExecutor, TCommandSource>(
-    val registry: Registry,
-) : CommandNode<TCommandSource> {
+class CommonRegistryEditCommandNode<TUser, TPlayer, TCommandSource> @Inject constructor(
+  private val commandService: SimpleCommandService<TCommandSource>,
+  registry: Registry,
+  private val registryEditCancelCommand: CommonRegistryEditCancelCommand<TUser, TPlayer, TCommandSource>,
+  private val registryEditCommitCommand: CommonRegistryEditCommitCommand<TUser, TPlayer, TCommandSource>,
+  private val registryEditKeyCommand: CommonRegistryEditKeyCommand<TUser, TPlayer, TCommandSource>,
+  private val registryEditSelectCommand: CommonRegistryEditSelectCommand<TUser, TPlayer, TCommandSource>,
+  private val registryEditStartCommand: CommonRegistryEditStartCommand<TUser, TPlayer, TCommandSource>,
+) {
 
-    companion object {
-        val CANCEL_ALIAS = listOf("cancel")
-        val COMMIT_ALIAS = listOf("commit")
-        val KEY_ALIAS = listOf("key")
-        val SELECT_ALIAS = listOf("select")
-        val START_ALIAS = listOf("start")
-        val HELP_ALIAS = listOf("help")
+  companion object {
+    val CANCEL_ALIAS = listOf("cancel")
+    val COMMIT_ALIAS = listOf("commit")
+    val KEY_ALIAS = listOf("key")
+    val SELECT_ALIAS = listOf("select")
+    val START_ALIAS = listOf("start")
+    val HELP_ALIAS = listOf("help")
 
-        const val CANCEL_DESCRIPTION = "Cancel a stage"
-        const val COMMIT_DESCRIPTION = "Commit changes"
-        const val KEY_DESCRIPTION = "Do stuff with a key"
-        const val SELECT_DESCRIPTION = "Select a registry"
-        const val START_DESCRIPTION = "Start a regedit with the specified environment"
-        const val ROOT_DESCRIPTION = "Root regedit command"
+    val REGEDIT_ALIAS = listOf("regedit")
 
-        const val KEY_USAGE = "<key> [info|set|unset|unstage] [<value>]"
-        const val SELECT_USAGE = "<reg>"
-        const val START_USAGE = "<env>"
+    val HELP_USAGE: String = "/$anvilAlias regedit help"
+  }
 
-        const val REGEDIT = "regedit"
-        lateinit var PATH: Array<String>
-    }
+  private var alreadyLoaded = false
 
-    private var alreadyLoaded = false
-    private val descriptions: MutableMap<List<String>, Function<TCommandSource, String>> = HashMap()
-    private val permissions: MutableMap<List<String>, Predicate<TCommandSource>> = HashMap()
-    private val usages: MutableMap<List<String>, Function<TCommandSource, String>> = HashMap()
+  lateinit var regeditMapping: CommandMapping<SimpleCommand<TCommandSource>>
+    private set
 
-    @Inject
-    protected lateinit var commandService: CommandService<TCommandExecutor, TCommandSource>
+  init {
+    registry.whenLoaded {
+      if (alreadyLoaded) {
+        return@whenLoaded
+      }
+      loadCommands()
+      alreadyLoaded = true
+    }.order(-10).register() // has to load before main node
+  }
 
-    @Inject
-    protected lateinit var environment: Environment
-
-    init {
-        registry.whenLoaded {
-            if (alreadyLoaded) return@whenLoaded
-            PATH = arrayOf(CommonAnvilCommandNode.getAlias())
-            loadCommands()
-            alreadyLoaded = true
-        }.order(-10).register() // has to load before main node
-        descriptions.put(CANCEL_ALIAS) { CANCEL_DESCRIPTION }
-        descriptions.put(COMMIT_ALIAS) { COMMIT_DESCRIPTION }
-        descriptions.put(KEY_ALIAS) { KEY_DESCRIPTION }
-        descriptions.put(SELECT_ALIAS) { SELECT_DESCRIPTION }
-        descriptions.put(START_ALIAS) { START_DESCRIPTION }
-        usages.put(KEY_ALIAS) { KEY_USAGE }
-        usages.put(SELECT_ALIAS) { SELECT_USAGE }
-        usages.put(START_ALIAS) { START_USAGE }
-    }
-
-    protected abstract fun loadCommands()
-    override fun getName(): String = REGEDIT
-    override fun getDescriptions(): Map<List<String>, Function<TCommandSource, String>> = descriptions
-    override fun getPermissions(): Map<List<String>, Predicate<TCommandSource>> = permissions
-    override fun getUsages(): Map<List<String>, Function<TCommandSource, String>> = usages
-    override fun getPath(): Array<String> = PATH
+  private fun loadCommands() {
+    val subCommands = listOf(
+      commandService.mapTerminal(CANCEL_ALIAS, registryEditCancelCommand),
+      commandService.mapTerminal(COMMIT_ALIAS, registryEditCommitCommand),
+      commandService.mapTerminal(KEY_ALIAS, registryEditKeyCommand),
+      commandService.mapTerminal(SELECT_ALIAS, registryEditSelectCommand),
+      commandService.mapTerminal(START_ALIAS, registryEditStartCommand),
+      commandService.mapTerminal(HELP_ALIAS, commandService.generateHelp { regeditMapping.subCommands }),
+    )
+    regeditMapping = commandService.mapRouting(
+      REGEDIT_ALIAS,
+      commandService.generateRoot(HELP_USAGE),
+      subCommands,
+      false
+    )
+  }
 }

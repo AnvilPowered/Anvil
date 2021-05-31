@@ -20,22 +20,21 @@ package org.anvilpowered.anvil.common.command.regedit
 
 import com.google.inject.Inject
 
-open class CommonRegistryEditCommitCommand<TUser, TPlayer, TString, TCommandSource>
-    : CommonRegistryEditBaseCommand<TUser, TPlayer, TString, TCommandSource>() {
+class CommonRegistryEditCommitCommand<TUser, TPlayer, TCommandSource>
+  : CommonRegistryEditBaseCommand<TUser, TPlayer, TCommandSource>() {
 
-    @Inject
-    private lateinit var registryEditRootCommand: CommonRegistryEditRootCommand<TUser, TPlayer, TString, TCommandSource>
+  @Inject
+  private lateinit var registryEditRootCommand: CommonRegistryEditRootCommand<TUser, TPlayer, TCommandSource>
 
-    fun execute(source: TCommandSource, context: Array<String>? = null) {
-        if (hasNoPerms(source)) return
-        val uuid = userService.getUUIDSafe(source)
-        val stage = registryEditRootCommand.stages[uuid]
-        if (stage == null) {
-            textService.send(registryEditRootCommand.notInStage, source)
-            return
-        }
-        if (stage.commit(source)) {
-            registryEditRootCommand.stages.remove(uuid)
-        }
+  override fun execute(source: TCommandSource, context: Array<String>) {
+    val uuid = userService.getUUIDSafe(source)
+    val stage = registryEditRootCommand.stages[uuid]
+    if (stage == null) {
+      textService.send(registryEditRootCommand.notInStage, source)
+      return
     }
+    if (stage.commit(source)) {
+      registryEditRootCommand.stages.remove(uuid)
+    }
+  }
 }

@@ -26,7 +26,6 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import org.anvilpowered.anvil.api.command.CommandNode;
 import org.anvilpowered.anvil.api.misc.Named;
 import org.anvilpowered.anvil.api.plugin.PluginInfo;
 import org.anvilpowered.anvil.api.registry.Registry;
@@ -92,9 +91,9 @@ public interface Environment extends Named, Comparable<Environment> {
 
     Object getPlugin();
 
-    <TString> PluginInfo<TString> getPluginInfo();
+    PluginInfo getPluginInfo();
 
-    <TString, TCommandSource> TextService<TString, TCommandSource> getTextService();
+    <TCommandSource> TextService<TCommandSource> getTextService();
 
     Registry getRegistry();
 
@@ -154,14 +153,6 @@ public interface Environment extends Named, Comparable<Environment> {
          * @param logger to set.
          */
         Builder setLoggerSupplier(Supplier<?> logger);
-
-        /**
-         * This will load your root {@link CommandNode} as
-         * defined by your guice module
-         *
-         * @return {@code this}
-         */
-        Builder withRootCommand();
 
         /**
          * Called when the {@link Environment} is loaded.

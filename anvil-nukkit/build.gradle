@@ -24,6 +24,11 @@ dependencies {
     implementation(kotlin_stdlib8 + ":" + kotlin_version)
     implementation kotlinx_coroutines
     implementation kotlinx_serialization
+    implementation(kyori_examination)
+    implementation(kyori_key)
+    implementation(kyori_legacy_serializer)
+    implementation(kyori_plain_serializer)
+    implementation("net.kyori:adventure-platform-facet:4.0.0-SNAPSHOT")
     implementation microutils_logging
     implementation mongo_java_driver
     implementation nukkit
@@ -49,7 +54,6 @@ shadowJar {
         include dependency(bson)
         include dependency(configurate_core)
         include dependency(configurate_hocon)
-        include dependency(flow_math)
         include dependency(guice)
         include dependency(javax)
         include dependency(javasisst)
@@ -59,12 +63,19 @@ shadowJar {
         include dependency(kotlin_stdlib8)
         include dependency(kotlinx_coroutines)
         include dependency(kotlinx_serialization)
+        include dependency(kyori_api)
+        include dependency(kyori_examination)
+        include dependency(kyori_key)
+        include dependency(kyori_legacy_serializer)
+        include dependency(kyori_plain_serializer)
+        include dependency("net.kyori:adventure-platform-facet:4.0.0-SNAPSHOT")
         include dependency(microutils_logging)
         include dependency(mongo_java_driver)
         include dependency(mongodb_driver_sync)
         include dependency(morphia)
         include dependency(reflections)
         include dependency(slf4j)
+        include dependency(sponge_math)
         include dependency(typesafe_config)
         include dependency(xodus)
         include dependency(xodus_entity_store)

@@ -31,7 +31,7 @@ class VelocityBackendServer(
     private val server: RegisteredServer,
     userService: UserService<Player, Player>,
 ) : CommonBackendServer<Player, Player>(userService) {
-    override fun getName(): String = server.serverInfo.name
+    override val name: String = server.serverInfo.name
     override fun getVersion(): CompletableFuture<VelocityVersion> {
         return server.ping().thenApply { VelocityVersion(it.version) }
     }

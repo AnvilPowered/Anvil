@@ -20,21 +20,20 @@ package org.anvilpowered.anvil.common.command.regedit
 
 import com.google.inject.Inject
 
-open class CommonRegistryEditCancelCommand<TUser, TPlayer, TString, TCommandSource>
-    : CommonRegistryEditBaseCommand<TUser, TPlayer, TString, TCommandSource>() {
+class CommonRegistryEditCancelCommand<TUser, TPlayer, TCommandSource>
+  : CommonRegistryEditBaseCommand<TUser, TPlayer, TCommandSource>() {
 
-    @Inject
-    private lateinit var registryEditRootCommand: CommonRegistryEditRootCommand<TUser, TPlayer, TString, TCommandSource>
+  @Inject
+  private lateinit var registryEditRootCommand: CommonRegistryEditRootCommand<TUser, TPlayer, TCommandSource>
 
-    fun execute(source: TCommandSource, context: Array<String>? = null) {
-        if (hasNoPerms(source)) return
-        val builder = textService.builder().append(pluginInfo.prefix)
-        val removed = registryEditRootCommand.stages.remove(userService.getUUIDSafe(source))
-        if (removed == null) {
-            builder.red().append("Could not find stage")
-        } else {
-            builder.green().append("Successfully cancelled changes. Didn't mean to? ")
-                .append(textService.undo("/$alias regedit start ${removed.envName}"))
-        }.sendTo(source)
-    }
+  override fun execute(source: TCommandSource, context: Array<String>) {
+    val builder = textService.builder().append(pluginInfo.prefix)
+    val removed = registryEditRootCommand.stages.remove(userService.getUUIDSafe(source))
+    if (removed == null) {
+      builder.red().append("Could not find stage")
+    } else {
+      builder.green().append("Successfully cancelled changes. Didn't mean to? ")
+        .append(textService.undo("/$anvilAlias regedit start ${removed.envName}"))
+    }.sendTo(source)
+  }
 }

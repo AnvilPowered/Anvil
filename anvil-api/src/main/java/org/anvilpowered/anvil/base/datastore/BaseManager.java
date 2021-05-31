@@ -26,7 +26,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import org.anvilpowered.anvil.api.datastore.Component;
+import org.anvilpowered.anvil.api.datastore.DBComponent;
 import org.anvilpowered.anvil.api.datastore.Manager;
 import org.anvilpowered.anvil.api.registry.Keys;
 import org.anvilpowered.anvil.api.registry.Registry;
@@ -38,7 +38,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @SuppressWarnings({"UnstableApiUsage", "unchecked"})
-public abstract class BaseManager<C extends Component<?, ?>> implements Manager<C> {
+public abstract class BaseManager<C extends DBComponent<?, ?>> implements Manager<C> {
 
     protected Registry registry;
 

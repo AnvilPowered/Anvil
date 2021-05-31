@@ -28,6 +28,6 @@ public class CommonCoreMemberManager extends BaseManager<CoreMemberRepository<?,
 
     @Inject
     public CommonCoreMemberManager(Registry registry) {
-        super(registry);
-    }
+    super(registry);
+  }
 }

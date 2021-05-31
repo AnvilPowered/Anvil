@@ -21,4 +21,5 @@ package org.anvilpowered.anvil.nukkit.module
 import cn.nukkit.command.CommandSender
 import org.anvilpowered.anvil.common.module.FallbackModule
 
-class NukkitFallbackModule : FallbackModule<String, CommandSender>()
+class NukkitFallbackModule : FallbackModule<CommandSender>() {
+}

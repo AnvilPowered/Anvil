@@ -6,24 +6,28 @@ plugins {
 jar.enabled = false // we only want shadowJar
 
 dependencies {
-    if (rootProject.getName().equals("Anvil")) {
-        implementation project(':anvil-api')
-        implementation project(':anvil-common')
-    } else {
-        implementation project(':Anvil:anvil-api')
-        implementation project(':Anvil:anvil-common')
-    }
+    api(project(":anvil-sponge:anvil-sponge-7"))
+    api(project(":anvil-sponge:anvil-sponge-8"))
 
+    implementation(configurate_core) {
+        version {
+            strictly '3.7.2'
+        }
+    }
+    implementation(configurate_hocon) {
+        version {
+            strictly '3.7.2'
+        }
+    }
     implementation javasisst
     implementation(kotlin_reflect + ":" + kotlin_version)
     implementation(kotlin_stdlib + ":" + kotlin_version)
     implementation(kotlin_stdlib8 + ":" + kotlin_version)
+    implementation "net.kyori:adventure-platform-spongeapi:4.0.0-SNAPSHOT"
     implementation kotlinx_coroutines
     implementation kotlinx_serialization
     implementation microutils_logging
     implementation mongo_java_driver
-    implementation sponge
-    annotationProcessor sponge
 }
 
 shadowJar {
@@ -32,18 +36,19 @@ shadowJar {
     archiveFileName = jarName
 
     dependencies {
-        if (rootProject.getName().equals("Anvil")) {
-            include project(':anvil-api')
-            include project(':anvil-common')
-        } else {
-            include project(':Anvil:anvil-api')
-            include project(':Anvil:anvil-common')
-        }
+        include(project(":anvil-api"))
+        include(project(":anvil-common"))
+        include(project(":anvil-sponge:anvil-sponge-7"))
+        include(project(":anvil-sponge:anvil-sponge-8"))
+        include(project(":anvil-sponge:anvil-sponge-common"))
 
         exclude("META-INF/versions/**")
         relocate("org.apache.commons", "relocated.apache")
+        relocate("ninja.leaping", "relocated")
         include dependency(apache_commons)
         include dependency(bson)
+        include dependency(configurate_core)
+        include dependency(configurate_hocon)
         include dependency(javasisst)
         include dependency(jedis)
         include dependency(kotlin_reflect)
@@ -51,11 +56,18 @@ shadowJar {
         include dependency(kotlin_stdlib8)
         include dependency(kotlinx_coroutines)
         include dependency(kotlinx_serialization)
+        include dependency(kyori_api)
+        include dependency(kyori_examination)
+        include dependency(kyori_key)
+        include dependency(kyori_legacy_serializer)
+        include dependency(kyori_plain_serializer)
+        include dependency("net.kyori:adventure-platform-spongeapi:4.0.0-SNAPSHOT")
         include dependency(microutils_logging)
         include dependency(mongo_java_driver)
         include dependency(mongodb_driver_sync)
         include dependency(morphia)
         include dependency(reflections)
+        include dependency(sponge_math)
         include dependency(xodus)
         include dependency(xodus_entity_store)
         include dependency(xodus_environment)

@@ -44,10 +44,10 @@ public class CommonRestrictionService implements RestrictionService {
 
     @Override
     public void put(Object entity, RestrictionCriteria criteria) {
-        Optional<UUID> optionalUUID = entityUtils.extractUUID(entity);
-        if (optionalUUID.isPresent()) {
+        UUID uuid = entityUtils.extractUUID(entity);
+        if (uuid != null) {
             // register with UUID instead, we don't want to persist the instances of identifiable entities
-            put(optionalUUID.get(), criteria);
+            put(uuid, criteria);
             return;
         }
         if (criteria.equals(RestrictionCriteria.none())) {
@@ -66,9 +66,9 @@ public class CommonRestrictionService implements RestrictionService {
 
     @Override
     public Optional<RestrictionCriteria> remove(Object entity) {
-        Optional<UUID> optionalUUID = entityUtils.extractUUID(entity);
-        if (optionalUUID.isPresent()) {
-            return remove(optionalUUID.get());
+        UUID uuid = entityUtils.extractUUID(entity);
+        if (uuid != null) {
+            return remove(uuid);
         }
         return Optional.ofNullable(entityRestrictions.remove(entity));
     }
@@ -80,9 +80,9 @@ public class CommonRestrictionService implements RestrictionService {
 
     @Override
     public RestrictionCriteria get(Object entity) {
-        Optional<UUID> optionalUUID = entityUtils.extractUUID(entity);
-        if (optionalUUID.isPresent()) {
-            return get(optionalUUID.get());
+        UUID uuid = entityUtils.extractUUID(entity);
+        if (uuid != null) {
+            return get(uuid);
         }
         return entityRestrictions.getOrDefault(entity, RestrictionCriteria.none());
     }

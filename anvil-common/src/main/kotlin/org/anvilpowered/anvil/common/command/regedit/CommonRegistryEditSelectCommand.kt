@@ -19,38 +19,37 @@
 package org.anvilpowered.anvil.common.command.regedit
 
 import com.google.inject.Inject
+import net.kyori.adventure.text.Component
 import kotlin.streams.toList
 
-open class CommonRegistryEditSelectCommand<TUser, TPlayer, TString, TCommandSource>
-    : CommonRegistryEditBaseCommand<TUser, TPlayer, TString, TCommandSource>() {
+class CommonRegistryEditSelectCommand<TUser, TPlayer, TCommandSource>
+  : CommonRegistryEditBaseCommand<TUser, TPlayer, TCommandSource>() {
 
-    @Inject
-    private lateinit var registryEditRootCommand: CommonRegistryEditRootCommand<TUser, TPlayer, TString, TCommandSource>
+  @Inject
+  private lateinit var registryEditRootCommand: CommonRegistryEditRootCommand<TUser, TPlayer, TCommandSource>
 
-    private val usage: TString by lazy {
-        textService.builder()
-            .append(pluginInfo.prefix)
-            .red().append("Please provide exactly one argument!\nUsage: /$alias regedit select <reg>")
-            .build()
+  private val usage: Component by lazy {
+    textService.builder()
+      .append(pluginInfo.prefix)
+      .red().append("Please provide exactly one argument!\nUsage: /$anvilAlias regedit select <reg>")
+      .build()
+  }
+
+  override fun execute(source: TCommandSource, context: Array<String>) {
+    val uuid = userService.getUUIDSafe(source)
+    val stage = registryEditRootCommand.stages[uuid]
+    textService.send(when {
+      stage == null -> registryEditRootCommand.notInStage
+      context.size == 1 -> stage.setRegistry(context[0])
+      else -> usage
+    }, source)
+  }
+
+  override fun suggest(source: TCommandSource, context: Array<String>): List<String> {
+    val stage = registryEditRootCommand.stages[userService.getUUIDSafe(source)] ?: return listOf()
+    return when (context.size) {
+      1 -> stage.registries.keys.stream().filter { it.startsWith(context[0]) }.toList()
+      else -> listOf()
     }
-
-    open fun execute(source: TCommandSource, context: Array<String>) {
-        if (hasNoPerms(source)) return
-        val uuid = userService.getUUIDSafe(source)
-        val stage = registryEditRootCommand.stages[uuid]
-        textService.send(when {
-            stage == null -> registryEditRootCommand.notInStage
-            context.size == 1 -> stage.setRegistry(context[0])
-            else -> usage
-        }, source)
-    }
-
-    open fun suggest(source: TCommandSource, context: Array<String>): List<String> {
-        if (!testPermission(source)) return listOf()
-        val stage = registryEditRootCommand.stages[userService.getUUIDSafe(source)] ?: return listOf()
-        return when (context.size) {
-            1 -> stage.registries.keys.stream().filter { it.startsWith(context[0]) }.toList()
-            else -> listOf()
-        }
-    }
+  }
 }

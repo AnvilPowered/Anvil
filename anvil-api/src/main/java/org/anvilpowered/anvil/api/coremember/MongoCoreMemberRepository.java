@@ -119,6 +119,7 @@ public interface MongoCoreMemberRepository
     /**
      * Deletes the property {@code nickName} for
      * documents that match the provided {@link boolean}
+     *
      * @param query {@link Query} to update documents for
      * @return {@link CompletableFuture} wrapped {@link Boolean}
      * true if successful, otherwise false

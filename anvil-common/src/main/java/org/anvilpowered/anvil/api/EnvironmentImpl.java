@@ -107,12 +107,12 @@ public class EnvironmentImpl implements Environment {
     }
 
     @Override
-    public <TString> PluginInfo<TString> getPluginInfo() {
+    public PluginInfo getPluginInfo() {
         return getInstance(PluginInfo.class.getCanonicalName());
     }
 
     @Override
-    public <TString, TCommandSource> TextService<TString, TCommandSource> getTextService() {
+    public <TCommandSource> TextService<TCommandSource> getTextService() {
         return getInstance(TextService.class.getCanonicalName());
     }
 

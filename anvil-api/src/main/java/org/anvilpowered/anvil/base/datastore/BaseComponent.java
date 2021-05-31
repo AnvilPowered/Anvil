@@ -19,7 +19,7 @@
 package org.anvilpowered.anvil.base.datastore;
 
 import com.google.inject.Inject;
-import org.anvilpowered.anvil.api.datastore.Component;
+import org.anvilpowered.anvil.api.datastore.DBComponent;
 import org.anvilpowered.anvil.api.datastore.DataStoreContext;
 
 import java.util.Optional;
@@ -27,7 +27,7 @@ import java.util.Optional;
 public abstract class BaseComponent<
     TKey,
     TDataStore>
-    implements Component<TKey, TDataStore> {
+    implements DBComponent<TKey, TDataStore> {
 
     @Inject
     private DataStoreContext<TKey, TDataStore> dataStoreContext;

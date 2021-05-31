@@ -18,48 +18,24 @@
 
 package org.anvilpowered.anvil.common.server
 
-import com.flowpowered.math.vector.Vector3d
 import org.anvilpowered.anvil.api.server.BackendServer
 import org.anvilpowered.anvil.api.server.LocationService
-import java.util.Optional
+import org.spongepowered.math.vector.Vector3d
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 abstract class CommonLocationService : LocationService {
 
-    override fun getServer(userUUID: UUID): Optional<out BackendServer> {
-        return Optional.empty()
-    }
+  override fun getServer(userUUID: UUID): BackendServer? = null
+  override fun getServer(userName: String): BackendServer? = null
+  override fun getServerForName(serverName: String): BackendServer? = null
+  override fun getServers(): List<BackendServer> = listOf()
+  override fun getWorldName(userUUID: UUID): String? = null
+  override fun getWorldName(userName: String): String? = null
+  override fun getPosition(userUUID: UUID): Vector3d? = null
+  override fun getPosition(userName: String): Vector3d? = null
 
-    override fun getServer(userName: String): Optional<out BackendServer> {
-        return Optional.empty()
-    }
-
-    override fun getServerForName(serverName: String): Optional<out BackendServer> {
-        return Optional.empty()
-    }
-
-    override fun getServers(): List<out BackendServer> {
-        return listOf()
-    }
-
-    override fun getWorldName(userUUID: UUID): Optional<String> {
-        return Optional.empty()
-    }
-
-    override fun getWorldName(userName: String): Optional<String> {
-        return Optional.empty()
-    }
-
-    override fun getPosition(userUUID: UUID): Optional<Vector3d> {
-        return Optional.empty()
-    }
-
-    override fun getPosition(userName: String): Optional<Vector3d> {
-        return Optional.empty()
-    }
-
-    override fun teleport(teleportingUserUUID: UUID, targetUserUUID: UUID): CompletableFuture<Boolean> {
-        return CompletableFuture.completedFuture(false)
-    }
+  override fun teleport(teleportingUserUUID: UUID, targetUserUUID: UUID): CompletableFuture<Boolean> {
+    return CompletableFuture.completedFuture(false)
+  }
 }

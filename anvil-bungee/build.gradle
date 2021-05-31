@@ -8,11 +8,9 @@ dependencies {
     if (rootProject.getName().equals("Anvil")) {
         implementation project(':anvil-api')
         implementation project(':anvil-common')
-        implementation project(':anvil-md5')
     } else {
         implementation project(':Anvil:anvil-api')
         implementation project(':Anvil:anvil-common')
-        implementation project(':Anvil:anvil-md5')
     }
 
     implementation bungee
@@ -21,6 +19,14 @@ dependencies {
     implementation(kotlin_reflect + ":" + kotlin_version)
     implementation(kotlin_stdlib + ":" + kotlin_version)
     implementation(kotlin_stdlib8 + ":" + kotlin_version)
+    implementation(kyori_api)
+    implementation(kyori_bungee_serializer)
+    implementation "net.kyori:adventure-platform-bungeecord:4.0.0-SNAPSHOT"
+    implementation(kyori_examination)
+    implementation(kyori_key)
+    implementation(kyori_legacy_serializer)
+    implementation(kyori_gson_serializer)
+    implementation(kyori_plain_serializer)
     implementation kotlinx_coroutines
     implementation kotlinx_serialization
     implementation microutils_logging
@@ -37,19 +43,16 @@ shadowJar {
         if (rootProject.getName().equals("Anvil")) {
             include project(':anvil-api')
             include project(':anvil-common')
-            include project(':anvil-md5')
         } else {
             include project(':Anvil:anvil-api')
             include project(':Anvil:anvil-common')
-            include project(':Anvil:anvil-md5')
         }
-
+        relocate("net.kyori.adventure", "relocated.text")
         include dependency(apache_commons)
         include dependency(aopalliance)
         include dependency(bson)
         include dependency(configurate_core)
         include dependency(configurate_hocon)
-        include dependency(flow_math)
         include dependency(guice)
         include dependency(javasisst)
         include dependency(javax)
@@ -59,6 +62,17 @@ shadowJar {
         include dependency(kotlin_stdlib8)
         include dependency(kotlinx_coroutines)
         include dependency(kotlinx_serialization)
+        include dependency("net.kyori:adventure-bom:4.5.1")
+        include dependency(kyori_api)
+        include dependency(kyori_examination)
+        include dependency(kyori_key)
+        include dependency(kyori_bungee_serializer)
+        include dependency("net.kyori:adventure-platform-bungeecord:4.0.0-SNAPSHOT")
+        include dependency(kyori_legacy_serializer)
+        include dependency(kyori_gson_serializer)
+        include dependency(kyori_plain_serializer)
+        include dependency("net.kyori:adventure-text-serializer-legacy-text3:4.5.1")
+        include dependency(kyori_platform)
         include dependency(microutils_logging)
         include dependency(mongo_java_driver)
         include dependency(mongodb_driver_sync)

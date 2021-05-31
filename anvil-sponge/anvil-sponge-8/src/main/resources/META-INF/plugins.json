@@ -1,0 +1,29 @@
+{
+  "plugins": [
+    {
+      "loader": "java_plain",
+      "id": "anvil",
+      "name": "Anvil",
+      "version": "0.4.0-SNAPSHOT",
+      "main-class": "org.anvilpowered.anvil.sponge8.AnvilSponge8",
+      "description": "A cross-platform Minecraft plugin framework",
+      "links": {
+        "homepage": "https://www.anvilpowered.org/",
+        "source": "https://github.com/AnvilPowered/Anvil",
+        "issues": "https://github.com/AnvilPowered/Anvil/issues"
+      },
+      "contributors": [
+        {
+          "name": "AnvilPowered",
+          "description": "Lead Developer"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "spongeapi",
+          "version": "8.0.0"
+        }
+      ]
+    }
+  ]
+}

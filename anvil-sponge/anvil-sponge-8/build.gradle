@@ -1,0 +1,26 @@
+plugins {
+  id("org.spongepowered.plugin")
+  id("org.jetbrains.kotlin.kapt")
+}
+
+dependencies {
+  api(project(":anvil-sponge:anvil-sponge-common"))
+  api(sponge + ":" + sponge8_version) {
+    exclude(module: "configurate-core")
+    exclude(module: "configurate-hocon")
+    exclude(module: "configurate-gson")
+    exclude(module: "configurate-yaml")
+  }
+  implementation(configurate_core) {
+    version {
+      strictly '3.7.2'
+    }
+  }
+  implementation(configurate_hocon) {
+    version {
+      strictly '3.7.2'
+    }
+  }
+  kapt(sponge + ":" + sponge8_version)
+  implementation(javax)
+}

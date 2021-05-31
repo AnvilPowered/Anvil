@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unchecked")
 public abstract class CommonUserService<TUser, TPlayer> implements UserService<TUser, TPlayer> {
@@ -59,8 +61,9 @@ public abstract class CommonUserService<TUser, TPlayer> implements UserService<T
             .getOneForUser(userUUID).thenApplyAsync(c -> c.map(CoreMember::getUserName));
     }
 
+    @NotNull
     @Override
-    public UUID getUUIDSafe(Object object) {
+    public UUID getUUIDSafe(@Nullable Object object) {
         if (userClass.isInstance(object)) {
             return getUUID((TUser) object);
         } else {

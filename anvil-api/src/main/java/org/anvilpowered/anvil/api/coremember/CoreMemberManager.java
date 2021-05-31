@@ -21,24 +21,4 @@ package org.anvilpowered.anvil.api.coremember;
 import org.anvilpowered.anvil.api.datastore.Manager;
 
 public interface CoreMemberManager extends Manager<CoreMemberRepository<?, ?>> {
-
-    @Override
-    default String getDefaultIdentifierSingularUpper() {
-        return "Core member";
-    }
-
-    @Override
-    default String getDefaultIdentifierPluralUpper() {
-        return "Core members";
-    }
-
-    @Override
-    default String getDefaultIdentifierSingularLower() {
-        return "core member";
-    }
-
-    @Override
-    default String getDefaultIdentifierPluralLower() {
-        return "core members";
-    }
 }

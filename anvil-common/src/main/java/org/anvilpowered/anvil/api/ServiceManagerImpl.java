@@ -20,8 +20,8 @@ package org.anvilpowered.anvil.api;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Injector;
-import org.anvilpowered.anvil.api.misc.BindingExtensions;
-import org.anvilpowered.anvil.common.misc.CommonBindingExtensions;
+import com.google.inject.Key;
+import org.anvilpowered.anvil.api.misc._AbstractModuleKt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +42,6 @@ class ServiceManagerImpl implements ServiceManager {
         functionBindings = new HashMap<>();
         registerBinding(EnvironmentManager.class, () -> environmentManager);
         registerBinding(Environment.Builder.class, EnvironmentBuilderImpl::new);
-        registerBinding(BindingExtensions.class, CommonBindingExtensions::new);
     }
 
     void setInjector(Injector injector) {
@@ -55,7 +54,7 @@ class ServiceManagerImpl implements ServiceManager {
         if (supplier != null) {
             return supplier;
         }
-        return () -> injector.getInstance(BindingExtensions.getKey(typeToken));
+        return () -> injector.getInstance(Key.get(_AbstractModuleKt.toTypeLiteralNoInline(typeToken)));
     }
 
     @Override
@@ -85,7 +84,7 @@ class ServiceManagerImpl implements ServiceManager {
             return function;
         }
         return injector -> ((Injector) injector)
-            .getInstance(BindingExtensions.getKey(typeToken));
+            .getInstance(Key.get(_AbstractModuleKt.toTypeLiteralNoInline(typeToken)));
     }
 
     @Override

@@ -18,11 +18,11 @@
 
 package org.anvilpowered.anvil.common.plugin;
 
-import com.google.inject.Inject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.anvilpowered.anvil.api.plugin.PluginInfo;
-import org.anvilpowered.anvil.api.util.TextService;
 
-public class AnvilPluginInfo<TString, TCommandSource> implements PluginInfo<TString> {
+public class AnvilPluginInfo implements PluginInfo {
     public static final String id = "anvil";
     public static final String name = "Anvil";
     public static final String version = "$modVersion";
@@ -31,12 +31,11 @@ public class AnvilPluginInfo<TString, TCommandSource> implements PluginInfo<TStr
     public static final String organizationName = "AnvilPowered";
     public static final String[] authors = {organizationName};
     public static final String buildDate = "$buildDate";
-    public TString pluginPrefix;
-
-    @Inject
-    public void setPluginPrefix(TextService<TString, TCommandSource> textService) {
-        pluginPrefix = textService.builder().blue().append("[").aqua().append(name).blue().append("] ").build();
-    }
+    public Component pluginPrefix = Component.text()
+      .append(Component.text("[", NamedTextColor.BLUE))
+      .append(Component.text(name, NamedTextColor.AQUA))
+      .append(Component.text("] ", NamedTextColor.BLUE))
+      .build();
 
     @Override
     public String getId() {
@@ -79,7 +78,7 @@ public class AnvilPluginInfo<TString, TCommandSource> implements PluginInfo<TStr
     }
 
     @Override
-    public TString getPrefix() {
+    public Component getPrefix() {
         return pluginPrefix;
     }
 }

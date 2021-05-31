@@ -18,8 +18,8 @@
 
 package org.anvilpowered.anvil.spigot.module
 
-import net.md_5.bungee.api.chat.TextComponent
 import org.anvilpowered.anvil.common.module.FallbackModule
 import org.bukkit.command.CommandSender
 
-class SpigotFallbackModule : FallbackModule<TextComponent, CommandSender>()
+class SpigotFallbackModule : FallbackModule<CommandSender>() {
+}

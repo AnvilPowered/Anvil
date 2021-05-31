@@ -18,22 +18,22 @@
 
 package org.anvilpowered.anvil.common.command.regedit
 
+import net.kyori.adventure.text.Component
 import java.util.UUID
 
-open class CommonRegistryEditRootCommand<TUser, TPlayer, TString, TCommandSource>
-    : CommonRegistryEditBaseCommand<TUser, TPlayer, TString, TCommandSource>() {
+class CommonRegistryEditRootCommand<TUser, TPlayer, TCommandSource>
+  : CommonRegistryEditBaseCommand<TUser, TPlayer, TCommandSource>() {
 
-    val stages: MutableMap<UUID, Stage<TString, TCommandSource>> = HashMap()
+  val stages: MutableMap<UUID, Stage<TCommandSource>> = HashMap()
 
-    val notInStage: TString by lazy {
-        textService.builder()
-            .append(pluginInfo.prefix)
-            .red().append("You are not currently in a regedit session. Use /$alias regedit help")
-            .build()
-    }
+  val notInStage: Component by lazy {
+    textService.builder()
+      .append(pluginInfo.prefix)
+      .red().append("You are not currently in a regedit session. Use /$anvilAlias regedit help")
+      .build()
+  }
 
-    fun execute(source: TCommandSource, context: Array<String>? = null) {
-        if (hasNoPerms(source)) return
-        textService.send(stages[userService.getUUIDSafe(source)]?.print() ?: notInStage, source)
-    }
+  override fun execute(source: TCommandSource, context: Array<String>) {
+    textService.send(stages[userService.getUUIDSafe(source)]?.print() ?: notInStage, source)
+  }
 }

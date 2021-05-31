@@ -19,11 +19,12 @@
 package org.anvilpowered.anvil.common.plugin
 
 import com.google.inject.Inject
+import net.kyori.adventure.text.Component
 import org.anvilpowered.anvil.api.Environment
 import org.anvilpowered.anvil.api.plugin.PluginInfo
 import org.anvilpowered.anvil.api.util.TextService
 
-class FallbackPluginInfo<TString : Any, TCommandSource> : PluginInfo<TString> {
+class FallbackPluginInfo<TCommandSource> : PluginInfo {
     companion object {
         const val version = "v0"
         const val description = "description"
@@ -36,20 +37,20 @@ class FallbackPluginInfo<TString : Any, TCommandSource> : PluginInfo<TString> {
     @Inject
     private lateinit var environment: Environment
 
-    lateinit var pluginPrefix: TString
+    lateinit var pluginPrefix: Component
 
     @Inject
-    fun setPluginPrefix(textService: TextService<TString, TCommandSource>) {
+    fun setPluginPrefix(textService: TextService<TCommandSource>) {
         pluginPrefix = textService.builder().gold().append("[", name, "] ").build()
     }
 
-    override fun getId(): String = environment.name
-    override fun getName(): String = environment.name
-    override fun getVersion(): String = Companion.version
-    override fun getDescription(): String = Companion.description
-    override fun getUrl(): String = Companion.url
-    override fun getAuthors(): Array<String> = Companion.authors
-    override fun getOrganizationName(): String = Companion.organizationName
-    override fun getBuildDate(): String = Companion.buildDate
-    override fun getPrefix(): TString = pluginPrefix
+    override val id: String = environment.name
+    override val name: String = environment.name
+    override val version: String = Companion.version
+    override val description: String = Companion.description
+    override val url: String = Companion.url
+    override val authors: Array<String> = Companion.authors
+    override val organizationName: String = Companion.organizationName
+    override val buildDate: String = Companion.buildDate
+    override val prefix: Component = pluginPrefix
 }

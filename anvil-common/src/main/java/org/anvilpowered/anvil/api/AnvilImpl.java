@@ -31,7 +31,6 @@ public class AnvilImpl extends Anvil {
 
     @Override
     protected void applyToBuilder(Environment.Builder builder) {
-        builder.withRootCommand();
     }
 
     public static Logger getLogger() {
